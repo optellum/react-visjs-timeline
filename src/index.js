@@ -42,8 +42,6 @@ export default class Timeline extends Component {
     this.state = {
       customTimes: [],
     }
-    this.oldHandlers = {}
-    console.log('Timeline constructor', props)
   }
 
   componentWillUnmount() {
@@ -91,20 +89,12 @@ export default class Timeline extends Component {
       animate = true,
       currentTime,
     } = this.props
-
-    // Remove any old handlers
-    each(this.oldHandlers, (event, handler) => this.$el.off(event, handler))
-
-    // Clear old handler map
-    this.oldHandlers = {}
-
-    // Install new handlers
     events.forEach(event => {
       const key = `${event}Handler`
       const handler = this.props[key]
+      this.$el.off(event)
       if (handler) {
         this.$el.on(event, handler)
-        this.oldHandlers[key] = handler
       }
     })
 
